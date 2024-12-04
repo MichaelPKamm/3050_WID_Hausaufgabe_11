@@ -30,24 +30,23 @@ export const UI = () => {
   };
 
   //Transformation per API (Altitude wird mitgegeben, damit der Link komplett ist)
-  //Links aus Dokumentation REFRAME: https://www.swisstopo.admin.ch/en/rest-api-geoservices-reframe-web
-  const URL_WGStoLV = "http://geodesy.geo.admin.ch/reframe/wgs84tolv95";
-  const URL_LVtoWGS = "http://geodesy.geo.admin.ch/reframe/lv95towgs84";
-  const altitude = 550.0;
+  //Links für Localhost: http://127.0.0.1:8000
+  const URL_WGStoLV = "http://127.0.0.1:8000/wgs84lv95";
+  const URL_LVtoWGS = "http://127.0.0.1:8000/lv95wgs84";
 
   //Funktion mit Errorhandling
   async function Reframe() {
     const URL =
       service == "LVtoWGS"
-        ? `${URL_LVtoWGS}?easting=${easting}&northing=${northing}&altitude=${altitude}&format=json`
-        : `${URL_WGStoLV}?easting=${easting}&northing=${northing}&altitude=${altitude}&format=json`;
+        ? `${URL_LVtoWGS}?Northing=${northing}&Easting=${easting}`
+        : `${URL_WGStoLV}?lat=${easting}&long=${northing}`;
 
     try {
       const resp = await fetch(URL);
       if (resp.ok) {
         const data = await resp.json();
-        setTransformedX(data.northing);
-        setTransformedY(data.easting);
+        setTransformedX(data.Northing);
+        setTransformedY(data.Easting);
       } else {
         setTransformedX("Error");
         setTransformedY("Error");
